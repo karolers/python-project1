@@ -6,7 +6,7 @@ couch = {
 }
 
 double_bed = {
-    "name": "double_bed",
+    "name": "double bed",
     "type": "furniture",
 }
 
@@ -21,12 +21,12 @@ dresser = {
 }
 
 queen_bed = {
-    "name": "queen_bed",
+    "name": "queen bed",
     "type": "furniture",
 }
 
 dinning_table = {
-    "name": "dinning_table",
+    "name": "dinning table",
     "type": "furniture",
 }
 
