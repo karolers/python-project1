@@ -79,17 +79,17 @@ game_room = {
 }
 
 bedroom_1 = {
-    "name": "bedroom_1",
+    "name": "bedroom 1",
     "type": "room",
 }
 
 bedroom_2 = {
-    "name": "bedroom_2",
+    "name": "bedroom 2",
     "type": "room",
 }
 
-livingroom = {
-    "name": "livingroom",
+living_room = {
+    "name": "living room",
     "type": "room",
 }
 
@@ -97,7 +97,7 @@ outside = {
   "name": "outside"
 }
 
-all_rooms = [game_room, bedroom_1, bedroom_2, livingroom, outside]
+all_rooms = [game_room, bedroom_1, bedroom_2, living_room, outside]
 
 all_doors = [door_a , door_b , door_c , door_d]
 
@@ -105,9 +105,19 @@ all_doors = [door_a , door_b , door_c , door_d]
 
 object_relations = {
     "game room": [couch, piano, door_a],
+    "bedroom 1": [queen_bed, door_a, door_b, door_c],
+    "bedroom 2": [double_bed, dresser, door_b],
+    "living room": [dinning_table, door_c, door_d],
+    "outside": [door_d],
     "piano": [key_a],
-    "outside": [door_a],
-    "door a": [game_room, outside]
+    "queen bed": [key_b],
+    "double bed": [key_c],
+    "dresser": [key_d],
+    "door a": [game_room, bedroom_1],
+    "door b": [bedroom_1, bedroom_2],
+    "door c": [bedroom_1, living_room],
+    "door d": [living_room, outside]
+
 }
 
 # define game state. Do not directly change this dict. 
