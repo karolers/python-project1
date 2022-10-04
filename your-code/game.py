@@ -200,7 +200,7 @@ def examine_item(item_name):
     
     for item in object_relations[current_room["name"]]:
         if(item["name"] == item_name):
-            output = "You examine " + item_name + ". "
+            output = "You examined " + item_name + ". "
             if(item["type"] == "door"):
                 have_key = False
                 for key in game_state["keys_collected"]:
@@ -231,4 +231,4 @@ def examine_item(item_name):
 
 game_state = INIT_GAME_STATE.copy()
 
-start_game()      
+start_game()
