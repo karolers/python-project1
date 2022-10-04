@@ -5,8 +5,48 @@ couch = {
     "type": "furniture",
 }
 
+double_bed = {
+    "name": "double_bed",
+    "type": "furniture",
+}
+
+piano = {
+    "name": "piano",
+    "type": "furniture",
+}
+
+dresser = {
+    "name": "dresser",
+    "type": "furniture",
+}
+
+queen_bed = {
+    "name": "queen_bed",
+    "type": "furniture",
+}
+
+dinning_table = {
+    "name": "dinning_table",
+    "type": "furniture",
+}
+
 door_a = {
     "name": "door a",
+    "type": "door",
+}
+
+door_b = {
+    "name": "door b",
+    "type": "door",
+}
+
+door_c = {
+    "name": "door c",
+    "type": "door",
+}
+
+door_d = {
+    "name": "door d",
     "type": "door",
 }
 
@@ -16,13 +56,23 @@ key_a = {
     "target": door_a,
 }
 
-piano = {
-    "name": "piano",
-    "type": "furniture",
-}
-
 game_room = {
     "name": "game room",
+    "type": "room",
+}
+
+bedroom_1 = {
+    "name": "bedroom_1",
+    "type": "room",
+}
+
+bedroom_2 = {
+    "name": "bedroom_2",
+    "type": "room",
+}
+
+livingroom = {
+    "name": "livingroom",
     "type": "room",
 }
 
@@ -30,9 +80,9 @@ outside = {
   "name": "outside"
 }
 
-all_rooms = [game_room, outside]
+all_rooms = [game_room, bedroom_1, bedroom_2, livingroom, outside]
 
-all_doors = [door_a]
+all_doors = [door_a , door_b , door_c , door_d]
 
 # define which items/rooms are related
 
