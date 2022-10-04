@@ -55,6 +55,23 @@ key_a = {
     "type": "key",
     "target": door_a,
 }
+key_b = {
+    "name": "key for door b",
+    "type": "key",
+    "target": door_b,
+}
+
+key_c = {
+    "name": "key for door c",
+    "type": "key",
+    "target": door_c,
+}
+
+key_d = {
+    "name": "key for door d",
+    "type": "key",
+    "target": door_d,
+}
 
 game_room = {
     "name": "game room",
