@@ -1,3 +1,5 @@
+import pygame
+from sqlalchemy import true
 # define rooms and items
 
 couch = {
@@ -128,7 +130,7 @@ object_relations = {
 INIT_GAME_STATE = {
     "current_room": game_room,
     "keys_collected": [],
-    "target_room": outside
+    "target_room": outside,
 }
 
 def linebreak():
@@ -137,11 +139,83 @@ def linebreak():
     """
     print("\n\n")
 
+def init_gameWindow():
+    # activate the pygame library
+    # initiate pygame and give permission
+    # to use pygame's functionality.
+    pygame.init()
+    
+    # define the RGB value for white,
+    #  green, blue colour .
+    white = (255, 255, 255)
+    green = (0, 255, 0)
+    blue = (0, 0, 128)
+    red = (255, 0 ,0)
+    
+    # assigning values to X and Y variable
+    X = 800
+    Y = 600
+    
+    # create the display surface object
+    # of specific dimension..e(X, Y).
+    display_surface = pygame.display.set_mode((X, Y))
+    
+    # set the pygame window name
+    pygame.display.set_caption('Show Text')
+    
+    # create a font object.
+    # 1st parameter is the font file
+    # which is present in pygame.
+    # 2nd parameter is size of the font
+    font = pygame.font.Font('freesansbold.ttf', 32)
+    
+    # create a text surface object,
+    # on which text is drawn on it.
+    text = font.render('Serrote', True, red, blue)
+    
+    # create a rectangular object for the
+    # text surface object
+    textRect = text.get_rect()
+    
+    # set the center of the rectangular object.
+    textRect.topleft = (X // 800, Y // 600)
+    
+    # infinite loop
+    while True:
+    
+        # completely fill the surface object
+        # with white color
+        display_surface.fill(blue)
+    
+        # copying the text surface object
+        # to the display surface object
+        # at the center coordinate.
+        display_surface.blit(text, textRect)
+    
+        # iterate over the list of Event objects
+        # that was returned by pygame.event.get() method.
+        for event in pygame.event.get():
+    
+            # if event object type is QUIT
+            # then quitting the pygame
+            # and program both.
+            if event.type == pygame.QUIT:
+    
+                # deactivates the pygame library
+                pygame.quit()
+    
+                # quit the program.
+                quit()
+    
+            # Draws the surface object to the screen.
+            pygame.display.update()
+
 def start_game():
     """
     Start the game
     """
     print("You wake up on a couch and find yourself in a strange house with no windows which you have never been to before. You don't remember why you are here and what had happened before. You feel some unknown danger is approaching and you must get out of the house, NOW!")
+    init_gameWindow()
     play_room(game_state["current_room"])
 
 def play_room(room):
