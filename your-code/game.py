@@ -1,122 +1,98 @@
 # define rooms and items
 
-couch = {
-    "name": "couch",
+light_switch = {
+    "name": "light switch",
     "type": "furniture",
 }
 
-double_bed = {
-    "name": "double bed",
+gun = {
+    "name": "gun",
     "type": "furniture",
 }
 
-piano = {
-    "name": "piano",
+toilet = {
+    "name": "toilet",
     "type": "furniture",
 }
 
-dresser = {
-    "name": "dresser",
+bathtub = {
+    "name": "bathtub",
     "type": "furniture",
 }
 
-queen_bed = {
-    "name": "queen bed",
-    "type": "furniture",
-}
-
-dinning_table = {
-    "name": "dinning table",
-    "type": "furniture",
-}
-
-door_a = {
-    "name": "door a",
+prisioner = {
+    "name": "prisioner",
     "type": "door",
 }
 
-door_b = {
-    "name": "door b",
+dead_man = {
+    "name": "dead man",
     "type": "door",
 }
 
-door_c = {
-    "name": "door c",
+leg = {
+    "name": "leg",
     "type": "door",
 }
 
-door_d = {
-    "name": "door d",
+door = {
+    "name": "door",
     "type": "door",
 }
 
-key_a = {
-    "name": "key for door a",
+lock = {
+    "name": "lock",
+    "type": "door",
+}
+
+tape = {
+    "name": "tape",
     "type": "key",
-    "target": door_a,
+    "target": dead_man,
 }
-key_b = {
-    "name": "key for door b",
+
+note = {
+    "name": "note",
     "type": "key",
-    "target": door_b,
+    "target": prisioner,
 }
 
-key_c = {
-    "name": "key for door c",
+key = {
+    "name": "key",
     "type": "key",
-    "target": door_c,
+    "target": lock,
 }
 
-key_d = {
-    "name": "key for door d",
+saw = {
+    "name": "saw",
     "type": "key",
-    "target": door_d,
+    "target": leg,
 }
 
-game_room = {
-    "name": "game room",
-    "type": "room",
-}
-
-bedroom_1 = {
-    "name": "bedroom 1",
-    "type": "room",
-}
-
-bedroom_2 = {
-    "name": "bedroom 2",
-    "type": "room",
-}
-
-living_room = {
-    "name": "living room",
-    "type": "room",
+bathroom = {
+  "name": "bathroom",
+  "type": "room",
 }
 
 outside = {
   "name": "outside"
 }
 
-all_rooms = [game_room, bedroom_1, bedroom_2, living_room, outside]
+all_rooms = [bathroom, outside]
 
-all_doors = [door_a , door_b , door_c , door_d]
+all_doors = [door,dead_man,prisioner,leg,lock]
 
 # define which items/rooms are related
 
 object_relations = {
-    "game room": [couch, piano, door_a],
-    "bedroom 1": [queen_bed, door_a, door_b, door_c],
-    "bedroom 2": [double_bed, dresser, door_b],
-    "living room": [dinning_table, door_c, door_d],
-    "outside": [door_d],
-    "piano": [key_a],
-    "queen bed": [key_b],
-    "double bed": [key_c],
-    "dresser": [key_d],
-    "door a": [game_room, bedroom_1],
-    "door b": [bedroom_1, bedroom_2],
-    "door c": [bedroom_1, living_room],
-    "door d": [living_room, outside]
+    "bathroom": [light_switch,lock,gun,toilet,bathtub,prisioner,dead_man,leg,door],
+    "outside": [door],
+    "lock": [key],
+    "toilet": [tape],
+    "leg": [saw],
+    "prisioner": [key,saw],
+    "dead man": [note],
+    "door": [bathroom,outside],
 
 }
 
@@ -126,9 +102,11 @@ object_relations = {
 # way you can replay the game multiple times.
 
 INIT_GAME_STATE = {
-    "current_room": game_room,
+    "current_room": bathroom,
     "keys_collected": [],
-    "target_room": outside
+    "target_room": outside,
+    "light_on": False,
+    
 }
 
 def linebreak():
@@ -141,7 +119,7 @@ def start_game():
     """
     Start the game
     """
-    print("You wake up on a couch and find yourself in a strange house with no windows which you have never been to before. You don't remember why you are here and what had happened before. You feel some unknown danger is approaching and you must get out of the house, NOW!")
+    print("You wake up on a bathroom locked by a chain. You don't remember why you are here and what had happened before. It's dark and you see almost nothing you must figure out how get out of there, NOW!")
     play_room(game_state["current_room"])
 
 def play_room(room):
@@ -152,15 +130,22 @@ def play_room(room):
     """
     game_state["current_room"] = room
     if(game_state["current_room"] == game_state["target_room"]):
-        print("Congrats! You escaped the room!")
+        print("Congrats! You escaped the bathroom!")
     else:
-        print("You are now in " + room["name"])
+        while game_state["light_on"] == False:
+            intended_action = input("You found a light switch, turn on the lights!").strip()
+            if intended_action == "examine":
+                game_state["light_on"] = True
+                play_room(room)
+            else:
+                print("Not sure what you mean. Turn on the lights!")
+
         intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
         if intended_action == "explore":
-            explore_room(room)
-            play_room(room)
+                explore_room(room)
+                play_room(room)
         elif intended_action == "examine":
-            examine_item(input("What would you like to examine?").strip())
+                examine_item(input("What would you like to examine?").strip())
         else:
             print("Not sure what you mean. Type 'explore' or 'examine'.")
             play_room(room)
@@ -210,7 +195,7 @@ def examine_item(item_name):
                     output += "You unlock it with a key you have."
                     next_room = get_next_room_of_door(item, current_room)
                 else:
-                    output += "It is locked but you don't have the key."
+                    output += "The door is open, but you can't reach it while chained."
             else:
                 if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
                     item_found = object_relations[item["name"]].pop()
