@@ -1,81 +1,90 @@
 # define rooms and items
-
-light_switch = {
-    "name": "light switch",
-    "type": "furniture",
-}
-
+import random
 gun = {
     "name": "gun",
     "type": "furniture",
+    "msg":" "
 }
 
 toilet = {
     "name": "toilet",
     "type": "furniture",
+    "msg":" "
 }
 
 bathtub = {
     "name": "bathtub",
     "type": "furniture",
+    "msg":" "
 }
 
 prisioner = {
     "name": "prisioner",
     "type": "door",
+    "msg":" "
 }
 
 dead_man = {
     "name": "dead man",
     "type": "door",
+    "msg":" "
 }
 
 leg = {
     "name": "leg",
     "type": "door",
+    "msg":" "
 }
 
 door = {
     "name": "door",
     "type": "door",
+    "msg": "You're out. I wonder if you'll come back for him..."
 }
 
 lock = {
     "name": "lock",
     "type": "door",
+    "msg":" "
 }
 
 tape = {
     "name": "tape",
     "type": "key",
     "target": dead_man,
+    "msg": "You might find a way out where the heat doesn't beat."
 }
 
 note = {
     "name": "note",
     "type": "key",
     "target": prisioner,
+    "msg": "Now you have to convince the other prisioner to give you the key for the chain lock!"
 }
 
 key = {
     "name": "key",
     "type": "key",
     "target": lock,
+    "msg": "Good for you, unlock your chain!"
 }
 
 saw = {
     "name": "saw",
     "type": "key",
     "target": leg,
+    "msg": "Will you have the guts to cut your own leg? You can allways try a little bit harder to convince him!"
 }
 
 bathroom = {
   "name": "bathroom",
   "type": "room",
+  "msg":" "
 }
 
 outside = {
-  "name": "outside"
+  "name": "outside",
+  "msg":" "
 }
 
 all_rooms = [bathroom, outside]
@@ -85,7 +94,7 @@ all_doors = [door,dead_man,prisioner,leg,lock]
 # define which items/rooms are related
 
 object_relations = {
-    "bathroom": [light_switch,lock,gun,toilet,bathtub,prisioner,dead_man,leg,door],
+    "bathroom": [lock,gun,toilet,bathtub,prisioner,dead_man,leg,door],
     "outside": [door],
     "lock": [key],
     "toilet": [tape],
@@ -106,8 +115,17 @@ INIT_GAME_STATE = {
     "keys_collected": [],
     "target_room": outside,
     "light_on": False,
-    
 }
+
+def lucky_key():
+    dark_bag = {}
+    if random.random() > 0.6:
+        print("It's not a key!! But you got an Hacksaw - so be a man, and cut your leg")
+        return True
+    else:
+        print("you got key")
+        return True
+
 
 def linebreak():
     """
@@ -134,7 +152,7 @@ def play_room(room):
     else:
         while game_state["light_on"] == False:
             intended_action = input("You found a light switch, turn on the lights!").strip()
-            if intended_action == "examine":
+            if intended_action == "Turn on the lights!":
                 game_state["light_on"] = True
                 play_room(room)
             else:
@@ -142,10 +160,10 @@ def play_room(room):
 
         intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
         if intended_action == "explore":
-                explore_room(room)
-                play_room(room)
+            explore_room(room)
+            play_room(room)
         elif intended_action == "examine":
-                examine_item(input("What would you like to examine?").strip())
+            examine_item(input("What would you like to examine?").strip())
         else:
             print("Not sure what you mean. Type 'explore' or 'examine'.")
             play_room(room)
@@ -156,7 +174,7 @@ def explore_room(room):
     Explore a room. List all items belonging to this room.
     """
     items = [i["name"] for i in object_relations[room["name"]]]
-    print("You explore the room. This is " + room["name"] + ". You find " + ", ".join(items))
+    print("You explored the room. You find " + ", ".join(items))
 
 def get_next_room_of_door(door, current_room):
     """
@@ -180,37 +198,44 @@ def examine_item(item_name):
     to keep playing.
     """
     current_room = game_state["current_room"]
-    next_room = ""
     output = None
+
+
     
     for item in object_relations[current_room["name"]]:
         if(item["name"] == item_name):
             output = "You examined " + item_name + ". "
-            if(item["type"] == "door"):
+
+            if(item["type"] == "door"):   ### DOORS
                 have_key = False
+
                 for key in game_state["keys_collected"]:
                     if(key["target"] == item):
                         have_key = True
                 if(have_key):
-                    output += "You unlock it with a key you have."
-                    next_room = get_next_room_of_door(item, current_room)
+                    if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
+                        item_found = object_relations[item["name"]].pop()
+                        game_state["keys_collected"].append(item_found)
+                        output += "You find " + item_found["name"] + ". " + item_found["msg"]
+                    else:
+                        output += item_found["msg"]
                 else:
-                    output += "The door is open, but you can't reach it while chained."
-            else:
+                    output += "You're missing some tips, explore some more and then come back!"
+
+            else:      #### FURNITURE WITH KEYS
                 if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
                     item_found = object_relations[item["name"]].pop()
                     game_state["keys_collected"].append(item_found)
-                    output += "You find " + item_found["name"] + "."
-                else:
+                    output += "You find " + item_found["name"] + ". " + item_found["msg"]
+                else:      #### FURNITURE WITH NOTHING
                     output += "There isn't anything interesting about it."
+
             print(output)
             break
 
     if(output is None):
         print("The item you requested is not found in the current room.")
-    
-    if(next_room and input("Do you want to go to the next room? Enter 'yes' or 'no'").strip() == 'yes'):
-        play_room(next_room)
+
     else:
         play_room(current_room)
 
