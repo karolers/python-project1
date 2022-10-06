@@ -1,5 +1,6 @@
 # define rooms and items
 import random
+import os
 gun = {
     "name": "gun",
     "type": "furniture",
@@ -76,6 +77,13 @@ saw = {
     "msg": "Will you have the guts to cut your own leg? You can allways try a little bit harder to convince him!"
 }
 
+free = {
+    "name": "free",
+    "type": "key",
+    "target": door,
+    "msg": "you are free"
+}
+
 bathroom = {
   "name": "bathroom",
   "type": "room",
@@ -95,7 +103,7 @@ all_doors = [door,dead_man,prisioner,leg,lock]
 
 object_relations = {
     "bathroom": [lock,gun,toilet,bathtub,prisioner,dead_man,leg,door],
-    "outside": [door],
+    "outside": [door, free],
     "lock": [key],
     "toilet": [tape],
     "leg": [saw],
@@ -156,7 +164,7 @@ def play_room(room):
                 game_state["light_on"] = True
                 play_room(room)
             else:
-                print("Not sure what you mean. Turn on the lights!")
+                print("Not sure what you mean. type: 'Turn on the lights!'")
 
         intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
         if intended_action == "explore":
@@ -217,8 +225,20 @@ def examine_item(item_name):
                         item_found = object_relations[item["name"]].pop()
                         game_state["keys_collected"].append(item_found)
                         output += "You find " + item_found["name"] + ". " + item_found["msg"]
+                        if item["name"] == 'lock':
+                            output += "You unlocked yourself"
+                            game_state["keys_collected"].append(free)
+                        
+                        if item["name"] == 'leg':
+                            output += "You cut yourself"
+                            game_state["keys_collected"].append(free)
+                        
+                        if item["name"] == 'door':
+                            print("You are freeee. Congrats!")
+                            os._exit(0)
+                            
                     else:
-                        output += item_found["msg"]
+                        output += item["msg"]
                 else:
                     output += "You're missing some tips, explore some more and then come back!"
 
