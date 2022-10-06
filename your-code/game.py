@@ -100,16 +100,16 @@ outside = {
 }
 
 game_window ={
-    "textBox" = "Saw",
-    "exploreB" = "",
-    "examineB" = "Examine",
-    "light_switchTempB" ="Light switch",
-    "gunTempB" ="Gun",
-    "bath_tubE" = "Bath tub",
-    "toiletB"="Toilet",
-    "dead_manB"="Dead man",
-    "prisionerB"="Prisioner",
-    "doorB"="Door"
+    "textBox":      "Saw",
+    "exploreB":     "",
+    "examineB":     "Examine",
+    "light_switchTempB": "Light switch",
+    "gunTempB":"    Gun",
+    "bath_tubE":    "Bath tub",
+    "toiletB":      "Toilet",
+    "dead_manB":    "Dead man",
+    "prisionerB":   "Prisioner",
+    "doorB":        "Door"
 }
 all_rooms = [game_room, bedroom_1, bedroom_2, living_room, outside]
 
@@ -184,7 +184,7 @@ def init_gameWindow():
     
     # create a text surface object,
     # on which text is drawn on it.
-    text = font.render('Serrote', True, red, blue)
+    text = font.render(game_window["textBox"], True, red, blue)
     
     # create a rectangular object for the
     # text surface object
