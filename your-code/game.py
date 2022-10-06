@@ -40,7 +40,7 @@ leg = {
 door = {
     "name": "door",
     "type": "door",
-    "msg": "You're out. I wonder if you'll come back for him..."
+    "msg": " "
 }
 
 lock = {
@@ -53,7 +53,7 @@ tape = {
     "name": "tape",
     "type": "key",
     "target": dead_man,
-    "msg": "You might find a way out where the heat doesn't beat."
+    "msg": "You might find a way out where the heart doesn't beat."
 }
 
 note = {
@@ -131,7 +131,7 @@ def lucky_key():
         print("It's not a key!! But you got an Hacksaw - so be a man, and cut your leg")
         return True
     else:
-        print("you got key")
+        print("Here, I'll give you the key. But please don't forget me here!")
         return True
 
 
@@ -160,11 +160,11 @@ def play_room(room):
     else:
         while game_state["light_on"] == False:
             intended_action = input("You found a light switch, turn on the lights!").strip()
-            if intended_action == "Turn on the lights!":
+            if intended_action == "turn on the lights!":
                 game_state["light_on"] = True
                 play_room(room)
             else:
-                print("Not sure what you mean. type: 'Turn on the lights!'")
+                print("Not sure what you mean. type: 'turn on the lights!'")
 
         intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
         if intended_action == "explore":
@@ -226,15 +226,15 @@ def examine_item(item_name):
                         game_state["keys_collected"].append(item_found)
                         output += "You find " + item_found["name"] + ". " + item_found["msg"]
                         if item["name"] == 'lock':
-                            output += "You unlocked yourself"
+                            output += "You unlocked the chain lock"
                             game_state["keys_collected"].append(free)
                         
                         if item["name"] == 'leg':
-                            output += "You cut yourself"
+                            output += "You cut your own leg"
                             game_state["keys_collected"].append(free)
                         
                         if item["name"] == 'door':
-                            print("You are freeee. Congrats!")
+                            print("You're out. I wonder if you'll come back for him...")
                             os._exit(0)
                             
                     else:
