@@ -99,6 +99,18 @@ outside = {
   "name": "outside"
 }
 
+game_window ={
+    "textBox" = "Saw",
+    "exploreB" = "",
+    "examineB" = "Examine",
+    "light_switchTempB" ="Light switch",
+    "gunTempB" ="Gun",
+    "bath_tubE" = "Bath tub",
+    "toiletB"="Toilet",
+    "dead_manB"="Dead man",
+    "prisionerB"="Prisioner",
+    "doorB"="Door"
+}
 all_rooms = [game_room, bedroom_1, bedroom_2, living_room, outside]
 
 all_doors = [door_a , door_b , door_c , door_d]
@@ -145,20 +157,21 @@ def init_gameWindow():
     # to use pygame's functionality.
     pygame.init()
     
+    
     # define the RGB value for white,
-    #  green, blue colour .
+    #  green, blue, red colour .
     white = (255, 255, 255)
     green = (0, 255, 0)
     blue = (0, 0, 128)
     red = (255, 0 ,0)
     
     # assigning values to X and Y variable
-    X = 800
-    Y = 600
+    width = 800
+    height= 600
     
     # create the display surface object
     # of specific dimension..e(X, Y).
-    display_surface = pygame.display.set_mode((X, Y))
+    display_surface = pygame.display.set_mode((width, height))
     
     # set the pygame window name
     pygame.display.set_caption('Show Text')
@@ -178,8 +191,15 @@ def init_gameWindow():
     textRect = text.get_rect()
     
     # set the center of the rectangular object.
-    textRect.topleft = (X // 800, Y // 600)
+    textRect.topleft = (width // 800,height// 600)
     
+    # light shade of the button
+    color_light = (170,170,170)
+  
+    # dark shade of the button
+    color_dark = (100,100,100)
+
+
     # infinite loop
     while True:
     
@@ -206,6 +226,7 @@ def init_gameWindow():
     
                 # quit the program.
                 quit()
+            #elif event.type == 
     
             # Draws the surface object to the screen.
             pygame.display.update()
