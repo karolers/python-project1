@@ -34,7 +34,7 @@ dead_man = {
 leg = {
     "name": "leg",
     "type": "door",
-    "msg":" "
+    "msg":"You cut your own leg"
 }
 
 door = {
@@ -46,7 +46,7 @@ door = {
 lock = {
     "name": "lock",
     "type": "door",
-    "msg":" "
+    "msg":"You unlocked the chain lock"
 }
 
 tape = {
@@ -77,11 +77,11 @@ saw = {
     "msg": "Will you have the guts to cut your own leg? You can allways try a little bit harder to convince him!"
 }
 
-free = {
-    "name": "free",
+freedom = {
+    "name": "freedom",
     "type": "key",
     "target": door,
-    "msg": "you are free"
+    "msg": " "
 }
 
 bathroom = {
@@ -103,13 +103,13 @@ all_doors = [door,dead_man,prisioner,leg,lock]
 
 object_relations = {
     "bathroom": [lock,gun,toilet,bathtub,prisioner,dead_man,leg,door],
-    "outside": [door, free],
-    "lock": [key],
+    "outside": [door, freedom],
     "toilet": [tape],
-    "leg": [saw],
     "prisioner": [key,saw],
     "dead man": [note],
     "door": [bathroom,outside],
+    "leg":[freedom],
+    "lock":[freedom]
 
 }
 
@@ -155,27 +155,24 @@ def play_room(room):
     explore (list all items in this room) or examine an item found here.
     """
     game_state["current_room"] = room
-    if(game_state["current_room"] == game_state["target_room"]):
-        print("Congrats! You escaped the bathroom!")
-    else:
-        while game_state["light_on"] == False:
-            intended_action = input("You found a light switch, turn on the lights!").strip()
-            if intended_action == "turn on the lights!":
-                game_state["light_on"] = True
-                play_room(room)
-            else:
-                print("Not sure what you mean. type: 'turn on the lights!'")
-
-        intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
-        if intended_action == "explore":
-            explore_room(room)
+    while game_state["light_on"] == False:
+        intended_action = input("You found a light switch, turn on the lights!").strip()
+        if intended_action == "turn on the lights!":
+            game_state["light_on"] = True
             play_room(room)
-        elif intended_action == "examine":
-            examine_item(input("What would you like to examine?").strip())
         else:
-            print("Not sure what you mean. Type 'explore' or 'examine'.")
-            play_room(room)
-        linebreak()
+            print("Not sure what you mean. type: 'turn on the lights!'")
+
+    intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
+    if intended_action == "explore":
+        explore_room(room)
+        play_room(room)
+    elif intended_action == "examine":
+        examine_item(input("What would you like to examine?").strip())
+    else:
+        print("Not sure what you mean. Type 'explore' or 'examine'.")
+        play_room(room)
+    linebreak()
 
 def explore_room(room):
     """
@@ -208,13 +205,11 @@ def examine_item(item_name):
     current_room = game_state["current_room"]
     output = None
 
-
-    
     for item in object_relations[current_room["name"]]:
         if(item["name"] == item_name):
             output = "You examined " + item_name + ". "
 
-            if(item["type"] == "door"):   ### DOORS
+            if(item["type"] == "door"):
                 have_key = False
 
                 for key in game_state["keys_collected"]:
@@ -225,14 +220,7 @@ def examine_item(item_name):
                         item_found = object_relations[item["name"]].pop()
                         game_state["keys_collected"].append(item_found)
                         output += "You find " + item_found["name"] + ". " + item_found["msg"]
-                        if item["name"] == 'lock':
-                            output += "You unlocked the chain lock"
-                            game_state["keys_collected"].append(free)
-                        
-                        if item["name"] == 'leg':
-                            output += "You cut your own leg"
-                            game_state["keys_collected"].append(free)
-                        
+
                         if item["name"] == 'door':
                             print("You're out. I wonder if you'll come back for him...")
                             os._exit(0)
