@@ -1,98 +1,77 @@
 # define rooms and items
 import random
-import os
+import gametext
 gun = {
     "name": "gun",
-    "type": "furniture",
-    "msg":" "
+    "type": "furniture"
 }
 
 toilet = {
     "name": "toilet",
-    "type": "furniture",
-    "msg":" "
+    "type": "furniture"
 }
 
 bathtub = {
     "name": "bathtub",
-    "type": "furniture",
-    "msg":" "
+    "type": "furniture"
 }
 
 prisioner = {
     "name": "prisioner",
-    "type": "door",
-    "msg":" "
-}
+    "type": "door"
+    }
 
 dead_man = {
     "name": "dead man",
-    "type": "door",
-    "msg":" "
+    "type": "door"
 }
 
 leg = {
     "name": "leg",
-    "type": "door",
-    "msg":" "
+    "type": "door"
 }
 
 door = {
     "name": "door",
-    "type": "door",
-    "msg": " "
+    "type": "door"
 }
 
 lock = {
     "name": "lock",
-    "type": "door",
-    "msg":" "
+    "type": "door"
 }
 
 tape = {
     "name": "tape",
     "type": "key",
-    "target": dead_man,
-    "msg": "You might find a way out where the heart doesn't beat."
+    "target": dead_man
 }
 
 note = {
     "name": "note",
     "type": "key",
-    "target": prisioner,
-    "msg": "Now you have to convince the other prisioner to give you the key for the chain lock!"
+    "target": prisioner
 }
 
 key = {
     "name": "key",
     "type": "key",
-    "target": lock,
-    "msg": "Good for you, unlock your chain!"
+    "target": lock
 }
 
 saw = {
     "name": "saw",
     "type": "key",
-    "target": leg,
-    "msg": "Will you have the guts to cut your own leg? You can allways try a little bit harder to convince him!"
-}
-
-free = {
-    "name": "free",
-    "type": "key",
-    "target": door,
-    "msg": "you are free"
+    "target": leg
 }
 
 bathroom = {
   "name": "bathroom",
-  "type": "room",
-  "msg":" "
+  "type": "room"
 }
 
 outside = {
-  "name": "outside",
-  "msg":" "
+  "name": "outside"
 }
 
 all_rooms = [bathroom, outside]
@@ -103,7 +82,7 @@ all_doors = [door,dead_man,prisioner,leg,lock]
 
 object_relations = {
     "bathroom": [lock,gun,toilet,bathtub,prisioner,dead_man,leg,door],
-    "outside": [door, free],
+    "outside": [door],
     "lock": [key],
     "toilet": [tape],
     "leg": [saw],
@@ -128,10 +107,10 @@ INIT_GAME_STATE = {
 def lucky_key():
     dark_bag = {}
     if random.random() > 0.6:
-        print("It's not a key!! But you got an Hacksaw - so be a man, and cut your leg")
+        print(gametext.getObjectText("saw"))
         return True
     else:
-        print("Here, I'll give you the key. But please don't forget me here!")
+        print(gametext.getObjectText("key"))
         return True
 
 
@@ -145,7 +124,7 @@ def start_game():
     """
     Start the game
     """
-    print("You wake up on a bathroom locked by a chain. You don't remember why you are here and what had happened before. It's dark and you see almost nothing you must figure out how get out of there, NOW!")
+    print(gametext.getNarration("start"))
     play_room(game_state["current_room"])
 
 def play_room(room):
@@ -156,24 +135,25 @@ def play_room(room):
     """
     game_state["current_room"] = room
     if(game_state["current_room"] == game_state["target_room"]):
-        print("Congrats! You escaped the bathroom!")
+        print(gametext.getNarration("free"))
     else:
         while game_state["light_on"] == False:
-            intended_action = input("You found a light switch, turn on the lights!").strip()
-            if intended_action == "turn on the lights!":
+            intended_action = input(gametext.getNarration("light switch")).strip()
+            if intended_action == "Turn on the lights!":
                 game_state["light_on"] = True
+                print(gametext.getNarration("lights on"))
                 play_room(room)
             else:
-                print("Not sure what you mean. type: 'turn on the lights!'")
+                print(gametext.getNarration("lights off"))
 
-        intended_action = input("What would you like to do? Type 'explore' or 'examine'?").strip()
+        intended_action = input(gametext.getNarration("advice")).strip()
         if intended_action == "explore":
             explore_room(room)
             play_room(room)
         elif intended_action == "examine":
-            examine_item(input("What would you like to examine?").strip())
+            examine_item(input(gametext.getNarration("choice")).strip())
         else:
-            print("Not sure what you mean. Type 'explore' or 'examine'.")
+            print(gametext.getNarration("advice"))
             play_room(room)
         linebreak()
 
@@ -181,8 +161,7 @@ def explore_room(room):
     """
     Explore a room. List all items belonging to this room.
     """
-    items = [i["name"] for i in object_relations[room["name"]]]
-    print("You explored the room. You find " + ", ".join(items))
+    gametext.getExplore()
 
 def get_next_room_of_door(door, current_room):
     """
@@ -210,9 +189,11 @@ def examine_item(item_name):
 
 
     
+
+    
     for item in object_relations[current_room["name"]]:
         if(item["name"] == item_name):
-            output = "You examined " + item_name + ". "
+            output = gametext.getNarration("examine", item["name"])
 
             if(item["type"] == "door"):   ### DOORS
                 have_key = False
@@ -224,37 +205,35 @@ def examine_item(item_name):
                     if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
                         item_found = object_relations[item["name"]].pop()
                         game_state["keys_collected"].append(item_found)
-                        output += "You find " + item_found["name"] + ". " + item_found["msg"]
+                        output+= gametext.getNarration(item["name"], item_found["name"])    
+
                         if item["name"] == 'lock':
-                            output += "You unlocked the chain lock"
-                            game_state["keys_collected"].append(free)
-                        
-                        if item["name"] == 'leg':
-                            output += "You cut your own leg"
-                            game_state["keys_collected"].append(free)
-                        
-                        if item["name"] == 'door':
-                            print("You're out. I wonder if you'll come back for him...")
-                            os._exit(0)
+                                output += gametext.getNarration("unlock")
+                                game_state["keys_collected"].append(free)
                             
-                    else:
-                        output += item["msg"]
+                        if item["name"] == 'leg':
+                                output += gametext.getNarration("cut")
+                                game_state["keys_collected"].append(free)
+                            
+                        if item["name"] == 'door':
+                                print(gametext.getNarration("free"))
+                                os._exit(0)
                 else:
-                    output += "You're missing some tips, explore some more and then come back!"
+                    output += gametext.getNarration("fail")
 
             else:      #### FURNITURE WITH KEYS
                 if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
                     item_found = object_relations[item["name"]].pop()
                     game_state["keys_collected"].append(item_found)
-                    output += "You find " + item_found["name"] + ". " + item_found["msg"]
+                    output+= gametext.getNarration(item["name"], item_found["name"])
                 else:      #### FURNITURE WITH NOTHING
-                    output += "There isn't anything interesting about it."
+                    output += gametext.getNarration("fail")
 
             print(output)
             break
 
     if(output is None):
-        print("The item you requested is not found in the current room.")
+        print(gametext.getNarration("no item"))
 
     else:
         play_room(current_room)
