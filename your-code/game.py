@@ -62,7 +62,15 @@ key = {
 saw = {
     "name": "saw",
     "type": "key",
-    "target": leg
+    "target": leg,
+    "msg": "Will you have the guts to cut your own leg? You can allways try a little bit harder to convince him!"
+}
+
+freedom = {
+    "name": "freedom",
+    "type": "key",
+    "target": door,
+    "msg": " "
 }
 
 bathroom = {
@@ -82,13 +90,13 @@ all_doors = [door,dead_man,prisioner,leg,lock]
 
 object_relations = {
     "bathroom": [lock,gun,toilet,bathtub,prisioner,dead_man,leg,door],
-    "outside": [door],
-    "lock": [key],
+    "outside": [door, freedom],
     "toilet": [tape],
-    "leg": [saw],
     "prisioner": [key,saw],
     "dead man": [note],
     "door": [bathroom,outside],
+    "leg":[freedom],
+    "lock":[freedom]
 
 }
 
@@ -134,17 +142,13 @@ def play_room(room):
     explore (list all items in this room) or examine an item found here.
     """
     game_state["current_room"] = room
-    if(game_state["current_room"] == game_state["target_room"]):
-        print(gametext.getNarration("free"))
-    else:
-        while game_state["light_on"] == False:
-            intended_action = input(gametext.getNarration("light switch")).strip()
-            if intended_action == "Turn on the lights!":
-                game_state["light_on"] = True
-                print(gametext.getNarration("lights on"))
-                play_room(room)
-            else:
-                print(gametext.getNarration("lights off"))
+    while game_state["light_on"] == False:
+        intended_action = input("You found a light switch, turn on the lights!").strip()
+        if intended_action == "turn on the lights!":
+            game_state["light_on"] = True
+            play_room(room)
+        else:
+            print("Not sure what you mean. type: 'turn on the lights!'")
 
         intended_action = input(gametext.getNarration("advice")).strip()
         if intended_action == "explore":
