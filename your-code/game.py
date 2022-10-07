@@ -3,7 +3,8 @@ import random
 import os
 #from winsound import PlaySound
 import gametext as gt
-from playsound import playsound 
+import playsound 
+
 
 gun = {
     "name": "gun",
@@ -260,5 +261,8 @@ def examine_item(item_name):
         play_room(current_room)
 
 game_state = INIT_GAME_STATE.copy()
-playsound(r"C:\Users\karol\Desktop\Project1\python-project1\saw-sound.mp3")
-start_game()
+
+
+if __name__ == '__main__':
+    playsound.playsound("saw.wav")
+    start_game()
