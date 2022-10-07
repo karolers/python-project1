@@ -18,7 +18,8 @@ examined_item={
     "prisoner": "the prisoner. ",
     "dead man": "the dead man. ",
     "leg": "your leg. ",
-    "door": "the door. "
+    "door": "the door. ",
+    "key": "a key. "
 }
 
 narration={
