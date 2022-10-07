@@ -5,95 +5,80 @@ import gametext as gt
 gun = {
     "name": "gun",
     "type": "furniture",
-    "msg":" "
 }
 
 toilet = {
     "name": "toilet",
     "type": "furniture",
-    "msg":" "
 }
 
 bathtub = {
     "name": "bathtub",
     "type": "furniture",
-    "msg":" "
 }
 
 prisioner = {
     "name": "prisioner",
     "type": "door",
-    "msg":" "
 }
 
 dead_man = {
     "name": "dead man",
     "type": "door",
-    "msg":" "
 }
 
 leg = {
     "name": "leg",
     "type": "door",
-    "msg":"You cut your own leg"
 }
 
 door = {
     "name": "door",
     "type": "door",
-    "msg": " "
 }
 
 lock = {
     "name": "lock",
     "type": "door",
-    "msg":"You unlocked the chain lock"
 }
 
 tape = {
     "name": "tape",
     "type": "key",
     "target": dead_man,
-    "msg": "You might find a way out where the heart doesn't beat."
 }
 
 note = {
     "name": "note",
     "type": "key",
     "target": prisioner,
-    "msg": "Now you have to convince the other prisioner to give you the key for the chain lock!"
 }
 
 key = {
     "name": "key",
     "type": "key",
     "target": lock,
-    "msg": "Good for you, unlock your chain!"
 }
 
 saw = {
     "name": "saw",
     "type": "key",
     "target": leg,
-    "msg": "Will you have the guts to cut your own leg? You can allways try a little bit harder to convince him!"
 }
 
 freedom = {
     "name": "freedom",
     "type": "key",
     "target": door,
-    "msg": " "
 }
 
 bathroom = {
   "name": "bathroom",
   "type": "room",
-  "msg":" "
 }
 
 outside = {
   "name": "outside",
-  "msg":" "
 }
 
 all_rooms = [bathroom, outside]
