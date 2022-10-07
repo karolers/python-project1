@@ -1,7 +1,10 @@
 # define rooms and items
 import random
 import os
+#from winsound import PlaySound
 import gametext as gt
+from playsound import playsound 
+
 gun = {
     "name": "gun",
     "type": "furniture",
@@ -20,8 +23,8 @@ bathtub = {
     "msg":" "
 }
 
-prisioner = {
-    "name": "prisioner",
+prisoner = {
+    "name": "prisoner",
     "type": "door",
     "msg":" "
 }
@@ -60,8 +63,8 @@ tape = {
 note = {
     "name": "note",
     "type": "key",
-    "target": prisioner,
-    "msg": "Now you have to convince the other prisioner to give you the key for the chain lock!"
+    "target": prisoner,
+    "msg": "Now you have to convince the other prisoner to give you the key for the chain lock!"
 }
 
 key = {
@@ -98,15 +101,15 @@ outside = {
 
 all_rooms = [bathroom, outside]
 
-all_doors = [door,dead_man,prisioner,leg,lock]
+all_doors = [door,dead_man,prisoner,leg,lock]
 
 # define which items/rooms are related
 
 object_relations = {
-    "bathroom": [lock,gun,toilet,bathtub,prisioner,dead_man,leg,door],
+    "bathroom": [lock,gun,toilet,bathtub,prisoner,dead_man,leg,door],
     "outside": [door, freedom],
     "toilet": [tape],
-    "prisioner": [key,saw],
+    "prisoner": [key,saw],
     "dead man": [note],
     "door": [bathroom,outside],
     "leg":[freedom],
@@ -132,7 +135,7 @@ def lucky_key():
         print(gt.getObjectText("saw"))
         return True
     else:
-        print(gt.getDialogue("prisioner"))
+        print(gt.getDialogue("prisoner"))
         return True
 
 
@@ -257,5 +260,5 @@ def examine_item(item_name):
         play_room(current_room)
 
 game_state = INIT_GAME_STATE.copy()
-
+playsound(r"C:\Users\karol\Desktop\Project1\python-project1\saw-sound.mp3")
 start_game()

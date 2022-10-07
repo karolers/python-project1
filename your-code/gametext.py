@@ -1,10 +1,10 @@
-objects =["lock", "gun", "toilet", "bathtub", "prisioner", "dead man", "leg", "door"]
+objects =["lock", "gun", "toilet", "bathtub", "prisoner", "dead man", "leg", "door"]
 
 objectText={
     "tape": "You may find a way out where the heart doesn't beat",
-    "note": "Now you have to convince the other prisioner to give you the key for the chain lock!",
+    "note": "Now you have to convince the other prisoner to give you the key for the chain lock!",
     "saw": "It's not a key!! But you got an Hacksaw - so be a man, and cut your leg",
-    "key": "you got a key"
+    "key": "Good for you, unlock your chain!"
 }
 
 examined_item={
@@ -12,10 +12,10 @@ examined_item={
     "toilet": "the toilet. ",
     "saw": "a saw. ",
     "note": "a note. ",
-    "tape": "some tape. ",
+    "tape": "a tape. ",
     "lock": "your lock. ",
     "bathtub": "the bathtub. ",
-    "prisioner": "the prisioner. ",
+    "prisoner": "the prisoner. ",
     "dead man": "the dead man. ",
     "leg": "your leg. ",
     "door": "the door. "
@@ -25,7 +25,7 @@ narration={
     "start": "You wake up on a bathroom locked by a chain. You don't remember why you are here and what had happened before. \nIt's dark and you see almost nothing you must figure out how get out of there, NOW!",
     "light switch": "You found a light switch, turn on the lights! ",
     "advice": "What would you like to do? Try to 'explore' or to 'examine' what's around you.",
-    "lights off": "Not sure what you mean. Turn on the lights!",
+    "lights off": "Not sure what you mean. Type: 'turn on the lights!'",
     "lights on": "You turned on the lights. Now you can look around.",
     "choice": "What would you like to examine?",
     "wrong input": "Not sure what you mean. Try to 'explore' or 'examine' anything.",
@@ -43,7 +43,7 @@ narration={
 }
 
 dialogue={
-    "prisioner": "Here, I'll give you the key. But please don't forget me here!"
+    "prisoner": "Here, I'll give you the key. But please don't forget me here!"
 }
 
 def getExplore():
