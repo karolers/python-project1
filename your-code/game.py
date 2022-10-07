@@ -9,95 +9,80 @@ import playsound
 gun = {
     "name": "gun",
     "type": "furniture",
-    "msg":" "
 }
 
 toilet = {
     "name": "toilet",
     "type": "furniture",
-    "msg":" "
 }
 
 bathtub = {
     "name": "bathtub",
     "type": "furniture",
-    "msg":" "
 }
 
 prisoner = {
     "name": "prisoner",
     "type": "door",
-    "msg":" "
 }
 
 dead_man = {
     "name": "dead man",
     "type": "door",
-    "msg":" "
 }
 
 leg = {
     "name": "leg",
     "type": "door",
-    "msg":"You cut your own leg"
 }
 
 door = {
     "name": "door",
     "type": "door",
-    "msg": " "
 }
 
 lock = {
     "name": "lock",
     "type": "door",
-    "msg":"You unlocked the chain lock"
 }
 
 tape = {
     "name": "tape",
     "type": "key",
     "target": dead_man,
-    "msg": "You might find a way out where the heart doesn't beat."
 }
 
 note = {
     "name": "note",
     "type": "key",
     "target": prisoner,
-    "msg": "Now you have to convince the other prisoner to give you the key for the chain lock!"
 }
 
 key = {
     "name": "key",
     "type": "key",
     "target": lock,
-    "msg": "Good for you, unlock your chain!"
 }
 
 saw = {
     "name": "saw",
     "type": "key",
     "target": leg,
-    "msg": "Will you have the guts to cut your own leg? You can allways try a little bit harder to convince him!"
 }
 
 freedom = {
     "name": "freedom",
     "type": "key",
     "target": door,
-    "msg": " "
 }
 
 bathroom = {
   "name": "bathroom",
   "type": "room",
-  "msg":" "
 }
 
 outside = {
   "name": "outside",
-  "msg":" "
 }
 
 all_rooms = [bathroom, outside]
@@ -134,10 +119,10 @@ def lucky_key():
     dark_bag = {}
     if random.random() > 0.6:
         print(gt.getObjectText("saw"))
-        return True
+        return saw
     else:
-        print(gt.getDialogue("prisoner"))
-        return True
+        print(gt.getObjectText("key"))
+        return key
 
 
 def linebreak():
@@ -220,6 +205,7 @@ def examine_item(item_name):
                     if(key["target"] == item):
                         have_key = True
                 if(have_key):
+
                     if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
                         item_found = object_relations[item["name"]].pop()
                         game_state["keys_collected"].append(item_found)
@@ -238,8 +224,7 @@ def examine_item(item_name):
                             os._exit(0)
                             
                     else:
-                        #print("Teste que mensagem extra apareceu para o :" item["name"])
-                        output += item["msg"]
+                        output += gt.getNarration("fail examine")
                 else:
                     output += gt.getNarration("no info")
 
@@ -262,7 +247,13 @@ def examine_item(item_name):
 
 game_state = INIT_GAME_STATE.copy()
 
+def choose():
+    names = ["Inês", "Joana","Teresa","Vivian","Joao G","Cristiana", "Francisco", "Bewek", "Renjith"]
+    random.shuffle(names)
+    print("Hello, " + names[0] + " let's play a game...")
+
 
 if __name__ == '__main__':
+    choose()
     playsound.playsound("saw.wav")
     start_game()
