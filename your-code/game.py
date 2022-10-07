@@ -1,62 +1,74 @@
 # define rooms and items
 import random
-import gametext
+import os
+import gametext as gt
 gun = {
     "name": "gun",
-    "type": "furniture"
+    "type": "furniture",
+    "msg":" "
 }
 
 toilet = {
     "name": "toilet",
-    "type": "furniture"
+    "type": "furniture",
+    "msg":" "
 }
 
 bathtub = {
     "name": "bathtub",
-    "type": "furniture"
+    "type": "furniture",
+    "msg":" "
 }
 
 prisioner = {
     "name": "prisioner",
-    "type": "door"
-    }
+    "type": "door",
+    "msg":" "
+}
 
 dead_man = {
     "name": "dead man",
-    "type": "door"
+    "type": "door",
+    "msg":" "
 }
 
 leg = {
     "name": "leg",
-    "type": "door"
+    "type": "door",
+    "msg":"You cut your own leg"
 }
 
 door = {
     "name": "door",
-    "type": "door"
+    "type": "door",
+    "msg": " "
 }
 
 lock = {
     "name": "lock",
-    "type": "door"
+    "type": "door",
+    "msg":"You unlocked the chain lock"
 }
 
 tape = {
     "name": "tape",
     "type": "key",
-    "target": dead_man
+    "target": dead_man,
+    "msg": "You might find a way out where the heart doesn't beat."
 }
 
 note = {
     "name": "note",
     "type": "key",
-    "target": prisioner
+    "target": prisioner,
+    "msg": "Now you have to convince the other prisioner to give you the key for the chain lock!"
 }
 
 key = {
     "name": "key",
     "type": "key",
-    "target": lock
+    "target": lock,
+    "msg": "Good for you, unlock your chain!"
 }
 
 saw = {
@@ -75,11 +87,13 @@ freedom = {
 
 bathroom = {
   "name": "bathroom",
-  "type": "room"
+  "type": "room",
+  "msg":" "
 }
 
 outside = {
-  "name": "outside"
+  "name": "outside",
+  "msg":" "
 }
 
 all_rooms = [bathroom, outside]
@@ -115,10 +129,10 @@ INIT_GAME_STATE = {
 def lucky_key():
     dark_bag = {}
     if random.random() > 0.6:
-        print(gametext.getObjectText("saw"))
+        print(gt.getObjectText("saw"))
         return True
     else:
-        print(gametext.getObjectText("key"))
+        print(gt.getDialogue("prisioner"))
         return True
 
 
@@ -132,7 +146,7 @@ def start_game():
     """
     Start the game
     """
-    print(gametext.getNarration("start"))
+    print(gt.getNarration("start"))
     play_room(game_state["current_room"])
 
 def play_room(room):
@@ -143,29 +157,29 @@ def play_room(room):
     """
     game_state["current_room"] = room
     while game_state["light_on"] == False:
-        intended_action = input("You found a light switch, turn on the lights!").strip()
+        intended_action = input(gt.getNarration("light switch")).strip()
         if intended_action == "turn on the lights!":
             game_state["light_on"] = True
             play_room(room)
         else:
-            print("Not sure what you mean. type: 'turn on the lights!'")
+            print(gt.getNarration("lights off"))
 
-        intended_action = input(gametext.getNarration("advice")).strip()
-        if intended_action == "explore":
-            explore_room(room)
-            play_room(room)
-        elif intended_action == "examine":
-            examine_item(input(gametext.getNarration("choice")).strip())
-        else:
-            print(gametext.getNarration("advice"))
-            play_room(room)
-        linebreak()
+    intended_action = input(gt.getNarration("advice")).strip()
+    if intended_action == "explore":
+        explore_room(room)
+        play_room(room)
+    elif intended_action == "examine":
+        examine_item(input(gt.getNarration("choice")).strip())
+    else:
+        print(gt.getNarration("wrong input"))
+        play_room(room)
+    linebreak()
 
 def explore_room(room):
     """
     Explore a room. List all items belonging to this room.
     """
-    gametext.getExplore()
+    print(gt.getExplore())
 
 def get_next_room_of_door(door, current_room):
     """
@@ -191,15 +205,11 @@ def examine_item(item_name):
     current_room = game_state["current_room"]
     output = None
 
-
-    
-
-    
     for item in object_relations[current_room["name"]]:
         if(item["name"] == item_name):
-            output = gametext.getNarration("examine", item["name"])
+            output = gt.getNarration("examine", item_name)
 
-            if(item["type"] == "door"):   ### DOORS
+            if(item["type"] == "door"):
                 have_key = False
 
                 for key in game_state["keys_collected"]:
@@ -209,35 +219,39 @@ def examine_item(item_name):
                     if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
                         item_found = object_relations[item["name"]].pop()
                         game_state["keys_collected"].append(item_found)
-                        output+= gametext.getNarration(item["name"], item_found["name"])    
+                        output += gt.getNarration("find", item_found["name"])
 
                         if item["name"] == 'lock':
-                                output += gametext.getNarration("unlock")
-                                game_state["keys_collected"].append(free)
-                            
+                            output = gt.getNarration("unlock")
+                            game_state["keys_collected"].append(freedom)
+
                         if item["name"] == 'leg':
-                                output += gametext.getNarration("cut")
-                                game_state["keys_collected"].append(free)
-                            
+                            output = gt.getNarration("cut")
+                            game_state["keys_collected"].append(freedom)
+
                         if item["name"] == 'door':
-                                print(gametext.getNarration("free"))
-                                os._exit(0)
+                            print(gt.getNarration("free"))
+                            os._exit(0)
+                            
+                    else:
+                        #print("Teste que mensagem extra apareceu para o :" item["name"])
+                        output += item["msg"]
                 else:
-                    output += gametext.getNarration("fail")
+                    output += gt.getNarration("no info")
 
             else:      #### FURNITURE WITH KEYS
                 if(item["name"] in object_relations and len(object_relations[item["name"]])>0):
                     item_found = object_relations[item["name"]].pop()
                     game_state["keys_collected"].append(item_found)
-                    output+= gametext.getNarration(item["name"], item_found["name"])
+                    output += gt.getNarration("find", item_found["name"])
                 else:      #### FURNITURE WITH NOTHING
-                    output += gametext.getNarration("fail")
+                    output += gt.getNarration("fail")
 
             print(output)
             break
 
     if(output is None):
-        print(gametext.getNarration("no item"))
+        print(gt.getNarration("no item"))
 
     else:
         play_room(current_room)
