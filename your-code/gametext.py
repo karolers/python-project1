@@ -57,7 +57,7 @@ def getNarration(dict_key, object=None):
     output+= narration[dict_key]
 
     if (object =="tape") | (object=="note") | (object=="key") | (object=="saw"):
-        output+=examined_item[object]+". "+ objectText[object]
+        output+=examined_item[object]+ objectText[object]
     elif(object!=None and dict_key=="examine"):
         output+=examined_item[object]
     return output
